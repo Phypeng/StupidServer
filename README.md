@@ -1,6 +1,6 @@
 # Stupid Server
 
-基于 Python Twisted, 用于快速搭建基于 HTTP 协议的旁路服务.
+基于 Python Twisted, 用于快速搭建提供 HTTP 协议的旁路服务.
 
 ### Feather
 1. 基于 Python, 部署维护简单
