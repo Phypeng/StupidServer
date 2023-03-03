@@ -11,9 +11,9 @@
 ### Quickstart
 #### Get Code
 ````
-git clone *.git
+git clone https://github.com/Phypeng/StupidServer.git
 cd StupidServer
-git checkout ***
+git checkout main
 ````
 #### Start Service
 ##### Linux
