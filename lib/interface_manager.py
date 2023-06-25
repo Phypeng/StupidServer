@@ -2,6 +2,7 @@ import os
 import sys
 import importlib
 import traceback
+import inspect
 from functools import lru_cache, cmp_to_key
 from types import FunctionType, ModuleType
 import logging
@@ -13,6 +14,8 @@ from lib.common import RWLock
 
 def reload_package(package):
     assert (hasattr(package, "__package__"))
+    assert isinstance(package.__package__, str)
+
     fn = package.__file__
     fn_dir = os.path.join(os.path.dirname(fn) + os.sep)
     module_visit = {fn}
@@ -23,11 +26,16 @@ def reload_package(package):
 
         for module_child in vars(module).values():
             if isinstance(module_child, ModuleType):
-                fn_child = getattr(module_child, "__file__", None)
-                if (fn_child is not None) and fn_child.startswith(fn_dir):
-                    if fn_child not in module_visit:
-                        module_visit.add(fn_child)
-                        reload_recursive_ex(module_child)
+                module_tmp = module_child
+            else:
+                module_tmp = inspect.getmodule(module_child)
+
+            fn_child = getattr(module_tmp, "__file__", None)
+
+            if (fn_child is not None) and fn_child.startswith(fn_dir):
+                if fn_child not in module_visit:
+                    module_visit.add(fn_child)
+                    reload_recursive_ex(module_tmp)
 
     return reload_recursive_ex(package)
 
